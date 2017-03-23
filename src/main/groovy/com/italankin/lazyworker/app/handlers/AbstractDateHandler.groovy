@@ -71,9 +71,9 @@ abstract class AbstractDateHandler implements Handler {
                     }
                     c = d
                     subTotal = 0
-                    sb.append("\n* - ")
+                    sb.append("\n_ --- ")
                     sb.append(c)
-                    sb.append(" -*")
+                    sb.append(" ---_")
                 } else {
                     subTotal += duration
                 }
