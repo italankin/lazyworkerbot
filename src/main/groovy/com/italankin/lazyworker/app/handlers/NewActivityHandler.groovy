@@ -36,11 +36,11 @@ class NewActivityHandler extends AbstractFinishActivityHandler {
         if (name.length() > 50) {
             name = name.substring(0, 50)
         }
+        if (finish(command)) {
+            // do not care
+        }
         Activity activity = activityManager.startActivity(userId, name, DateUtils.currentTime(), comment)
         if (activity != null) {
-            if (finish(command)) {
-                // do not care
-            }
             return command.reply("Activity ${activity.desc()} started.\nUse /finish to finish.")
         } else {
             return false
