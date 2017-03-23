@@ -25,9 +25,8 @@ class CurrentActivityHandler implements Handler {
         if (current == null) {
             return command.reply("No current activity.")
         } else {
-            String msg = String.format("Activity #%d *%s* started at _%s_.\nSession time: _%s_",
-                    current.id,
-                    current.name,
+            String msg = String.format("Activity %s started at _%s_.\nSession time: _%s_",
+                    current.desc(),
                     DateUtils.detail(current.startTime),
                     DateUtils.pretty(current.duration()))
             if (current.comment != null && !current.comment.isEmpty()) {
