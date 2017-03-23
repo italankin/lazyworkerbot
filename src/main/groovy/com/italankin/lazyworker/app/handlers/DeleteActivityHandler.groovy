@@ -30,7 +30,7 @@ class DeleteActivityHandler implements Handler {
             }
             Activity activity = activityManager.deleteActivity(command.getSenderId(), id)
             if (activity) {
-                return command.reply("Deleted activity ${activity.desc()}.")
+                return command.reply("Deleted activity:\n${activity.detail()}.")
             } else {
                 return command.reply("No activity found.")
             }
