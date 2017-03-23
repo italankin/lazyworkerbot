@@ -15,18 +15,15 @@ abstract class AbstractFinishActivityHandler implements Handler {
     }
 
     boolean finish(Command command) {
-        Activity current = activityManager.getCurrentActivity(command.getSenderId())
-        if (current == null) {
-            return false
-        }
         long finishTime = DateUtils.currentTime()
-        if (activityManager.finishCurrentActivity(command.getSenderId(), current.id, finishTime) > 0) {
+        Activity activity = activityManager.finishCurrentActivity(command.getSenderId(), finishTime)
+        if (activity) {
             String msg = String.format("Activity %s finished at _%s_.\nSession time: _%s_",
-                    current.desc(),
+                    activity.desc(),
                     DateUtils.detail(finishTime),
-                    DateUtils.pretty(finishTime - current.startTime))
-            if (current.comment != null && !current.comment.isEmpty()) {
-                msg = msg + "\n" + current.comment
+                    DateUtils.pretty(activity.duration()))
+            if (activity.comment != null && !activity.comment.isEmpty()) {
+                msg = msg + "\n" + activity.comment
             }
             return command.reply(msg)
         } else {
