@@ -7,7 +7,7 @@ final class DateUtils {
 
     public static final TimeZone TIME_ZONE = TimeZone.getTimeZone("GMT+5:00")
     public static final DateFormat DATE_FORMAT_DETAIL = new SimpleDateFormat("H:mm:ss 'on' d MMMM yyyy")
-    public static final DateFormat DATE_FORMAT_DAY = new SimpleDateFormat("d MMMM yyyy")
+    public static final DateFormat DATE_FORMAT_DAY = new SimpleDateFormat("MMM d, EEE, yyyy")
     public static final DateFormat DATE_FORMAT_TIME = new SimpleDateFormat("HH:mm")
 
     static {
