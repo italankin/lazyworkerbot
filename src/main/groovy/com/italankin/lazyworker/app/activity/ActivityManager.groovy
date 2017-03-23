@@ -53,10 +53,15 @@ class ActivityManager {
         return a
     }
 
-    int deleteActivity(int userId, int id) throws Exception {
-        String sql = "DELETE FROM activities WHERE id=? AND user_id=?"
-        def params = [id, userId]
-        return SQL.executeUpdate(sql, params)
+    Activity deleteActivity(int userId, int id) throws Exception {
+        Activity activity = getActivity(userId, id)
+        if(activity) {
+            String sql = "DELETE FROM activities WHERE id=? AND user_id=?"
+            def params = [id, userId]
+            int update = SQL.executeUpdate(sql, params)
+            return update > 0 ? activity : null
+        }
+        return null
     }
 
     int finishCurrentActivity(int userId, int id, long finishTime) throws Exception {
@@ -79,8 +84,8 @@ class ActivityManager {
     }
 
     List<Activity> getActivitiesForInterval(int userId, long start, long end) throws Exception {
-        String sql = "SELECT * FROM activities WHERE user_id=? AND start_time>=? AND finish_time<=? ORDER BY start_time ASC"
-        def params = [userId, start, end]
+        String sql = "SELECT * FROM activities WHERE user_id=? AND start_time>=? AND finish_time<=? AND (finish_time>0 OR start_time<?) ORDER BY start_time ASC"
+        def params = [userId, start, end, end]
 
         List<Activity> list = []
         SQL.query(sql, params) { ResultSet rs ->

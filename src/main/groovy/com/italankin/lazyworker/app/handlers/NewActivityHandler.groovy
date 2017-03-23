@@ -41,7 +41,7 @@ class NewActivityHandler extends AbstractFinishActivityHandler {
         }
         Activity activity = activityManager.startActivity(userId, name, DateUtils.currentTime(), comment)
         if (activity != null) {
-            return command.reply("Activity #${activity.id} *$name* started and is current.\nUse /finish to finish current task.")
+            return command.reply("Activity ${activity.desc()} started.\nUse /finish to finish.")
         } else {
             return false
         }

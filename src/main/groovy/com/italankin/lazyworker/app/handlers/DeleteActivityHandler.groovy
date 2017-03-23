@@ -1,5 +1,6 @@
 package com.italankin.lazyworker.app.handlers
 
+import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
@@ -27,10 +28,11 @@ class DeleteActivityHandler implements Handler {
             } catch (NumberFormatException e) {
                 return false
             }
-            if (activityManager.deleteActivity(command.getSenderId(), id) > 0) {
-                return command.reply("Deleted activity with id #$id.")
+            Activity activity = activityManager.deleteActivity(command.getSenderId(), id)
+            if (activity) {
+                return command.reply("Deleted activity ${activity.desc()}.")
             } else {
-                return command.reply("No activity found with id #$id.")
+                return command.reply("No activity found.")
             }
         } else {
             return false

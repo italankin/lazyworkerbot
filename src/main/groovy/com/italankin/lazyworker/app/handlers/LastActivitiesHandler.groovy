@@ -31,11 +31,10 @@ class LastActivitiesHandler implements Handler {
             int size = activities.size()
             for (int i = 0; i < size; i++) {
                 Activity activity = activities.get(i)
-                sb.append("\n#")
-                sb.append(activity.id)
-                sb.append(" *")
-                sb.append(activity.name)
-                sb.append("*")
+                sb.append("\n")
+                sb.append(i + 1)
+                sb.append(". ")
+                sb.append(activity.desc())
             }
             sb.append("\nTo see more inforation about specific activity use /show.")
             return command.reply(sb.toString())

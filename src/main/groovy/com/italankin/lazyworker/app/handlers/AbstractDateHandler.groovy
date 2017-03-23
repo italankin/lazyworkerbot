@@ -9,6 +9,7 @@ import com.italankin.lazyworker.app.utils.DateUtils
 abstract class AbstractDateHandler implements Handler {
 
     protected static final long ONE_DAY = 1000 * 60 * 60 * 24
+    protected static final long INTERVAL_MAX = 100
 
     protected final ActivityManager activityManager
 
@@ -29,6 +30,9 @@ abstract class AbstractDateHandler implements Handler {
         }
         long start = interval[0]
         long end = interval[1]
+        if ((end - start) / ONE_DAY > INTERVAL_MAX) {
+            return command.reply("The interval should not exceed 100 days.")
+        }
         boolean oneDay = (end - start) <= ONE_DAY
         List<Activity> activities = activityManager.getActivitiesForInterval(command.getSenderId(), start, end)
         if (activities.isEmpty()) {
@@ -50,18 +54,36 @@ abstract class AbstractDateHandler implements Handler {
             sb.append(DateUtils.day(end))
         }
         sb.append("*:")
-        long total = 0
+        long total = 0, subTotal = 0
+        String c = null
         int s = activities.size()
         for (int i = 0; i < s; i++) {
             Activity activity = activities.get(i)
             long duration = activity.duration()
             total += duration
+            if (!oneDay) {
+                String d = DateUtils.day(activity.startTime)
+                if (!c || c != d) {
+                    if (subTotal > 0) {
+                        sb.append("\nSubtotal: _")
+                        sb.append(DateUtils.pretty(subTotal))
+                        sb.append("_")
+                    }
+                    c = d
+                    subTotal = 0
+                    sb.append("\n* - ")
+                    sb.append(c)
+                    sb.append(" -*")
+                } else {
+                    subTotal += duration
+                }
+            }
             sb.append("\n")
             sb.append("\\[")
             sb.append(DateUtils.time(activity.startTime))
-            sb.append("] *")
-            sb.append(activity.name)
-            sb.append("* - _")
+            sb.append("] ")
+            sb.append(activity.desc())
+            sb.append(": _")
             sb.append(DateUtils.pretty(duration))
             sb.append("_")
         }

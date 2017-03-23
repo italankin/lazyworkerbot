@@ -21,9 +21,8 @@ abstract class AbstractFinishActivityHandler implements Handler {
         }
         long finishTime = DateUtils.currentTime()
         if (activityManager.finishCurrentActivity(command.getSenderId(), current.id, finishTime) > 0) {
-            String msg = String.format("Activity #%d *%s* finished at _%s_.\nSession time: _%s_",
-                    current.id,
-                    current.name,
+            String msg = String.format("Activity %s finished at _%s_.\nSession time: _%s_",
+                    current.desc(),
                     DateUtils.detail(finishTime),
                     DateUtils.pretty(finishTime - current.startTime))
             if (current.comment != null && !current.comment.isEmpty()) {
