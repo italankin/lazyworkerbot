@@ -19,9 +19,6 @@ class NewActivityHandler extends AbstractFinishActivityHandler {
     @Override
     boolean handle(Command command) throws Exception {
         int userId = command.getSenderId()
-        if (finish(command)) {
-            // do not care
-        }
         String rawArgs = command.getRawArgs()
         if (rawArgs == null || rawArgs.isEmpty()) {
             return false
@@ -41,6 +38,9 @@ class NewActivityHandler extends AbstractFinishActivityHandler {
         }
         Activity activity = activityManager.startActivity(userId, name, DateUtils.currentTime(), comment)
         if (activity != null) {
+            if (finish(command)) {
+                // do not care
+            }
             return command.reply("Activity ${activity.desc()} started.\nUse /finish to finish.")
         } else {
             return false
