@@ -18,9 +18,9 @@ class MonthHandler extends DateHandler {
     @Override
     protected long[] getInterval(Command command) {
         Calendar calendar = DateUtils.getZoneCalendar(new Date())
-        long end = getStartOfDay(calendar.getTime()) + DAY_MILLIS
+        long end = DateUtils.getStartOfDay(calendar.getTime()) + DAY_MILLIS
         calendar.set(Calendar.DATE, 1)
-        long start = getStartOfDay(calendar.getTime())
+        long start = DateUtils.getStartOfDay(calendar.getTime())
         return [start, end]
     }
 

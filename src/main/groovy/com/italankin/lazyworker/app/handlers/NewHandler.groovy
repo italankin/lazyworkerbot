@@ -21,7 +21,7 @@ class NewHandler extends AbstractFinishHandler {
         int userId = command.getSenderId()
         String rawArgs = command.getRawArgs()
         if (rawArgs == null || rawArgs.isEmpty()) {
-            return false
+            rawArgs = "New activity"
         }
         String name
         String comment = null
@@ -35,8 +35,6 @@ class NewHandler extends AbstractFinishHandler {
         name = name.trim()
         if (name.length() > 50) {
             name = name.substring(0, 50)
-        } else if (name.isEmpty()) {
-            name = "Untitled acitivty"
         }
         if (finish(command)) {
             // do not care

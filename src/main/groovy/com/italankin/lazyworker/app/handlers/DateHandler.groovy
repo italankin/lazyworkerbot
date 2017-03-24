@@ -56,14 +56,10 @@ class DateHandler extends AbstractDateHandler {
                 break
             case 2:
                 Date start = parse(args[0])
-                if (start == null) {
-                    return null
-                }
                 Date end = parse(args[1])
-                if (end == null) {
-                    return null
+                if (start && end) {
+                    return [DateUtils.getStartOfDay(start), DateUtils.getStartOfDay(end)]
                 }
-                return [getStartOfDay(start), getStartOfDay(end)]
         }
         return null
     }
@@ -77,19 +73,9 @@ class DateHandler extends AbstractDateHandler {
     }
 
     protected static long[] intervalWithOffset(Date from, int daysOffset) {
-        long start = getStartOfDay(from)
+        long start = DateUtils.getStartOfDay(from)
         return [start, start + daysOffset * DAY_MILLIS]
     }
-
-    protected static long getStartOfDay(Date from) {
-        Calendar calendar = DateUtils.getZoneCalendar(from)
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        return calendar.getTimeInMillis()
-    }
-
 
     @Override
     String helpMessage() {

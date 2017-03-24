@@ -9,11 +9,13 @@ final class DateUtils {
     public static final DateFormat DATE_FORMAT_DETAIL = new SimpleDateFormat("H:mm:ss 'on' d MMMM yyyy")
     public static final DateFormat DATE_FORMAT_DAY = new SimpleDateFormat("MMM d, EEE, yyyy")
     public static final DateFormat DATE_FORMAT_TIME = new SimpleDateFormat("HH:mm")
+    public static final DateFormat DATE_FORMAT_STD = new SimpleDateFormat("yyyy-MM-dd")
 
     static {
         DATE_FORMAT_DETAIL.setTimeZone(TIME_ZONE)
         DATE_FORMAT_DAY.setTimeZone(TIME_ZONE)
         DATE_FORMAT_TIME.setTimeZone(TIME_ZONE)
+        DATE_FORMAT_STD.setTimeZone(TIME_ZONE)
     }
 
     static Calendar getZoneCalendar(Date from) {
@@ -26,8 +28,21 @@ final class DateUtils {
         return new Date().getTime()
     }
 
+    static long getStartOfDay(Date time) {
+        Calendar calendar = getZoneCalendar(time)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        return calendar.getTimeInMillis()
+    }
+
     static String day(long time) {
         return DATE_FORMAT_DAY.format(new Date(time))
+    }
+
+    static String std(long time) {
+        return DATE_FORMAT_STD.format(new Date(time))
     }
 
     static String detail(long time) {
