@@ -51,7 +51,7 @@ abstract class AbstractDateHandler implements Handler {
         sb.append(DateUtils.day(start))
         if (!oneDay) {
             sb.append("* - *")
-            sb.append(DateUtils.day(end))
+            sb.append(DateUtils.day(end - DAY_MILLIS))
         }
         sb.append("*:")
         if (oneDay) {
