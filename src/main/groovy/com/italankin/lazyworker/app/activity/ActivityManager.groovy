@@ -117,6 +117,18 @@ class ActivityManager {
         return list
     }
 
+    Activity updateActivity(int userId, int id, String newName, String newComment) {
+        String sql = "UPDATE activities SET name=?, comment=? WHERE user_id=? AND id=?"
+        def params = [newName, newComment, userId, id]
+        int c = SQL.executeUpdate(sql, params)
+        if (c == 0) {
+            return null
+        }
+        return getActivity(userId, id)
+    }
+
+
+
     static Activity parseActivity(ResultSet rs) throws SQLException {
         Activity activity = new Activity()
         activity.id = rs.getInt("id")
@@ -127,5 +139,4 @@ class ActivityManager {
         activity.comment = rs.getString("comment")
         return activity
     }
-
 }

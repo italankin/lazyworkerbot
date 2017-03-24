@@ -5,13 +5,13 @@ import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
 
-class LastActivitiesHandler implements Handler {
+class LastHandler implements Handler {
 
     private static final int LIMIT = 20
 
     private final ActivityManager activityManager
 
-    LastActivitiesHandler(ActivityManager activityManager) {
+    LastHandler(ActivityManager activityManager) {
         this.activityManager = activityManager
     }
 

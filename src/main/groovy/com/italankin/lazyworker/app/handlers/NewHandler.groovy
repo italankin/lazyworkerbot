@@ -5,9 +5,9 @@ import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.utils.DateUtils
 
-class NewActivityHandler extends AbstractFinishActivityHandler {
+class NewHandler extends AbstractFinishHandler {
 
-    NewActivityHandler(ActivityManager activityManager) {
+    NewHandler(ActivityManager activityManager) {
         super(activityManager)
     }
 
@@ -35,6 +35,8 @@ class NewActivityHandler extends AbstractFinishActivityHandler {
         name = name.trim()
         if (name.length() > 50) {
             name = name.substring(0, 50)
+        } else if (name.isEmpty()) {
+            name = "Untitled acitivty"
         }
         if (finish(command)) {
             // do not care
@@ -49,7 +51,7 @@ class NewActivityHandler extends AbstractFinishActivityHandler {
 
     @Override
     String helpMessage() {
-        return "Usage: /new activity\\_name\n\\[comment]"
+        return "Usage: /new [name]\n\\[comment]"
     }
 
 }

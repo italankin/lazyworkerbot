@@ -12,7 +12,7 @@ class Activity {
     String comment
 
     long duration() {
-        if (isCurrent()) {
+        if (!isCurrent()) {
             return finishTime - startTime
         }
         return DateUtils.currentTime() - startTime
@@ -27,7 +27,7 @@ class Activity {
         sb.append(desc())
         sb.append("\n*Started at*: _")
         sb.append(DateUtils.DATE_FORMAT_DETAIL.format(new Date(startTime)))
-        if (isCurrent()) {
+        if (!isCurrent()) {
             sb.append("_\n*Finished at*: _")
             sb.append(DateUtils.DATE_FORMAT_DETAIL.format(new Date(finishTime)))
         }
@@ -42,7 +42,7 @@ class Activity {
     }
 
     boolean isCurrent() {
-        return finishTime > 0
+        return finishTime <= 0
     }
 
 }

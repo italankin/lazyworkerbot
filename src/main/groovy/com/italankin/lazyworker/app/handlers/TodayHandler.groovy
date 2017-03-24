@@ -16,7 +16,7 @@ class TodayHandler extends DateHandler {
 
     @Override
     protected long[] getInterval(Command command) {
-        return oneDayInterval(new Date())
+        return intervalWithOffset(new Date(), 1)
     }
 
     @Override

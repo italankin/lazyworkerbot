@@ -38,15 +38,15 @@ class DateHandler extends AbstractDateHandler {
                 if (s.length() == 8) {
                     Date date = parse(s)
                     if (date != null) {
-                        return oneDayInterval(date)
+                        return intervalWithOffset(date, 1)
                     }
                 } else if (s.length() in [1, 2, 3, 4]) {
                     try {
                         int offset = Integer.parseInt(s)
                         if (offset >= -100 && offset <= 0) {
-                            Calendar calendar = Calendar.getInstance(DateUtils.TIME_ZONE)
+                            Calendar calendar = DateUtils.getZoneCalendar(new Date())
                             calendar.add(Calendar.DAY_OF_MONTH, offset)
-                            return oneDayInterval(calendar.getTime())
+                            return intervalWithOffset(calendar.getTime(), 1)
                         }
                         return null
                     } catch (NumberFormatException e) {
@@ -63,7 +63,7 @@ class DateHandler extends AbstractDateHandler {
                 if (end == null) {
                     return null
                 }
-                return [normalize(start), normalize(end)]
+                return [getStartOfDay(start), getStartOfDay(end)]
         }
         return null
     }
@@ -76,20 +76,20 @@ class DateHandler extends AbstractDateHandler {
         }
     }
 
-    protected static long[] oneDayInterval(Date from) {
-        long start = normalize(from)
-        return [start, start + ONE_DAY]
+    protected static long[] intervalWithOffset(Date from, int daysOffset) {
+        long start = getStartOfDay(from)
+        return [start, start + daysOffset * DAY_MILLIS]
     }
 
-    protected static long normalize(Date from) {
-        Calendar calendar = Calendar.getInstance(DateUtils.TIME_ZONE)
-        calendar.setTime(from)
+    protected static long getStartOfDay(Date from) {
+        Calendar calendar = DateUtils.getZoneCalendar(from)
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         return calendar.getTimeInMillis()
     }
+
 
     @Override
     String helpMessage() {

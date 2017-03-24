@@ -6,11 +6,11 @@ import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
 import com.italankin.lazyworker.app.utils.DateUtils
 
-class CurrentActivityHandler implements Handler {
+class CurrentHandler implements Handler {
 
     private final ActivityManager activityManager
 
-    CurrentActivityHandler(ActivityManager activityManager) {
+    CurrentHandler(ActivityManager activityManager) {
         this.activityManager = activityManager
     }
 

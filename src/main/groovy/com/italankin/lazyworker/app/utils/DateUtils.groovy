@@ -16,6 +16,12 @@ final class DateUtils {
         DATE_FORMAT_TIME.setTimeZone(TIME_ZONE)
     }
 
+    static Calendar getZoneCalendar(Date from) {
+        Calendar calendar = Calendar.getInstance(TIME_ZONE)
+        calendar.setTime(from)
+        return calendar
+    }
+
     static long currentTime() {
         return new Date().getTime()
     }
@@ -33,10 +39,22 @@ final class DateUtils {
     }
 
     static String pretty(long time) {
-        int s = (int) (time.intdiv(1000)) % 60
-        int m = (int) ((time.intdiv(1000 * 60)) % 60)
-        int h = (int) ((time.intdiv(1000L * 60 * 60)) % 24)
+        long s = seconds(time) % 60
+        long m = minutes(time) % 60
+        long h = hours(time)
         return String.format("%dh %dm %ds", h, m, s)
+    }
+
+    static long seconds(long time) {
+        return time.intdiv(1000)
+    }
+
+    static long minutes(long time) {
+        return time.intdiv(1000 * 60)
+    }
+
+    static long hours(long time) {
+        return time.intdiv(1000 * 60 * 60)
     }
 
     private DateUtils() {

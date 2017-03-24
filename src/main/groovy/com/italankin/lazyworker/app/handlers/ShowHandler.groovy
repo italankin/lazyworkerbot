@@ -5,11 +5,11 @@ import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
 
-class ShowActivityHandler implements Handler {
+class ShowHandler implements Handler {
 
     private final ActivityManager activityManager
 
-    ShowActivityHandler(ActivityManager activityManager) {
+    ShowHandler(ActivityManager activityManager) {
         this.activityManager = activityManager
     }
 
@@ -39,7 +39,7 @@ class ShowActivityHandler implements Handler {
 
     @Override
     String helpMessage() {
-        return "Usage: /show activity\\_id"
+        return "Usage: /show id"
     }
 
 }

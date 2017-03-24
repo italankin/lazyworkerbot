@@ -5,11 +5,11 @@ import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
 
-class DeleteActivityHandler implements Handler {
+class DeleteHandler implements Handler {
 
     private final ActivityManager activityManager
 
-    DeleteActivityHandler(ActivityManager activityManager) {
+    DeleteHandler(ActivityManager activityManager) {
         this.activityManager = activityManager
     }
 
@@ -41,7 +41,7 @@ class DeleteActivityHandler implements Handler {
 
     @Override
     String helpMessage() {
-        return "Usage: /delete activity\\_id"
+        return "Usage: /delete id"
     }
 
 }

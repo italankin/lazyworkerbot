@@ -6,11 +6,11 @@ import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
 import com.italankin.lazyworker.app.utils.DateUtils
 
-abstract class AbstractFinishActivityHandler implements Handler {
+abstract class AbstractFinishHandler implements Handler {
 
     protected final ActivityManager activityManager
 
-    AbstractFinishActivityHandler(ActivityManager activityManager) {
+    AbstractFinishHandler(ActivityManager activityManager) {
         this.activityManager = activityManager
     }
 

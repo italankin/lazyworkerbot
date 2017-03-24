@@ -3,9 +3,9 @@ package com.italankin.lazyworker.app.handlers
 import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Command
 
-class FinishActivityHandler extends AbstractFinishActivityHandler {
+class FinishHandler extends AbstractFinishHandler {
 
-    FinishActivityHandler(ActivityManager activityManager) {
+    FinishHandler(ActivityManager activityManager) {
         super(activityManager)
     }
 

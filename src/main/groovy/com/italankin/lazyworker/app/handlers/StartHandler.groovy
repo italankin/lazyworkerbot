@@ -3,7 +3,7 @@ package com.italankin.lazyworker.app.handlers
 import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
 
-class StartCommandHandler implements Handler {
+class StartHandler implements Handler {
 
     @Override
     String name() {
