@@ -51,7 +51,9 @@ class UpdateActivityHandler implements Handler {
 
     @Override
     String helpMessage() {
-        return "Usage: /update id new\\_name\n\\[comment]"
+        return "Usage: /update id new\\_name\n\\[\\*comment]\n\n" +
+                "_new\\_name_ - new name of the activity\n" +
+                "_comment_ - optional comment, *must* start on the new line"
     }
 
 }

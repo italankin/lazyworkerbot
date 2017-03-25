@@ -49,7 +49,9 @@ class NewHandler extends AbstractFinishHandler {
 
     @Override
     String helpMessage() {
-        return "Usage: /new [name]\n\\[comment]"
+        return "Usage: /new \\[name] \\[\\*comment]\n\n" +
+                "_name_ - name of the new activity\n" +
+                "_comment_ - optional comment, *must* start on the new line"
     }
 
 }

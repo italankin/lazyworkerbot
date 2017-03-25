@@ -24,7 +24,7 @@ class FinishHandler extends AbstractFinishHandler {
 
     @Override
     String helpMessage() {
-        return null
+        return "Usage: /finish"
     }
 
 }

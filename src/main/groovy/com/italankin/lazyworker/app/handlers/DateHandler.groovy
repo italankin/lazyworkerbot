@@ -79,7 +79,11 @@ class DateHandler extends AbstractDateHandler {
 
     @Override
     String helpMessage() {
-        return "Usage: /date start \\[end]"
+        return "Usage: /date start \\[end]\n" +
+                "Or: /date offset\n\n" +
+                "_start_ - start date in format `yyyyMMdd` (inclusive)\n" +
+                "_end_ - end date in format `yyyyMMdd` (exclusive); if not specified, defaults to next day after _start_\n" +
+                "_offset_ - number between `-100` and `0` as offset in days relative to current day"
     }
 
 }

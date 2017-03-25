@@ -39,7 +39,8 @@ class ShowHandler implements Handler {
 
     @Override
     String helpMessage() {
-        return "Usage: /show id"
+        return "Usage: /show id\n\n" +
+                "_id_ - id of the activity to delete"
     }
 
 }

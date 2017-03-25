@@ -21,7 +21,7 @@ class TodayHandler extends DateHandler {
 
     @Override
     String helpMessage() {
-        return null
+        return "Usage: /today"
     }
 
 }

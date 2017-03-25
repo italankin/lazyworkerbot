@@ -22,18 +22,28 @@ class DeleteHandler implements Handler {
     boolean handle(Command command) throws Exception {
         String rawArgs = command.getRawArgs()
         if (rawArgs != null) {
-            int id
+            List<Integer> ids = []
             try {
-                id = Integer.parseInt(rawArgs.trim())
+                String[] split = rawArgs.split("\\s+")
+                if (split.length == 0) {
+                    return false
+                }
+                split.each {
+                    ids += Integer.parseInt(it)
+                }
             } catch (NumberFormatException e) {
                 return false
             }
-            Activity activity = activityManager.deleteActivity(command.getSenderId(), id)
-            if (activity) {
-                return command.reply("Deleted activity:\n${activity.detail()}.")
-            } else {
-                return command.reply("No activity found.")
+            int userId = command.getSenderId()
+            for (Integer id : ids) {
+                Activity activity = activityManager.deleteActivity(userId, id)
+                if (activity) {
+                    command.reply("Deleted activity:\n${activity.detail()}")
+                } else {
+                    command.reply("No activity with id=`$id` found.")
+                }
             }
+            return true
         } else {
             return false
         }
@@ -41,7 +51,9 @@ class DeleteHandler implements Handler {
 
     @Override
     String helpMessage() {
-        return "Usage: /delete id"
+        return "Usage: /delete ids\n\n" +
+                "_ids_ - ids (separated by space) of the activities to delete\n\n" +
+                "*Use with care.*"
     }
 
 }

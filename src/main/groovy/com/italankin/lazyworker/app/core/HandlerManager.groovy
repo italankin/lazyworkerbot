@@ -39,4 +39,8 @@ class HandlerManager {
         }
     }
 
+    LinkedHashMap<String, Handler> getHandlers() {
+        return handlers
+    }
+
 }

@@ -12,7 +12,7 @@ class StartHandler implements Handler {
 
     @Override
     boolean handle(Command command) throws Exception {
-        return command.reply("I'm listening.")
+        return command.reply("Use /help to see list of available commands.")
     }
 
     @Override

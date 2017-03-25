@@ -42,6 +42,7 @@ class App implements UpdateHandler {
                 .add(new MonthHandler(activityManager))
                 .add(new WeekHandler(activityManager))
                 .add(new ReportHandler(activityManager))
+        handlerManager.add(new HelpHandler(handlerManager))
     }
 
     void start() throws Exception {

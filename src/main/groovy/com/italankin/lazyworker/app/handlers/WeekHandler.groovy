@@ -26,7 +26,7 @@ class WeekHandler extends DateHandler {
 
     @Override
     String helpMessage() {
-        return null
+        return "Usage: /week"
     }
 
 }

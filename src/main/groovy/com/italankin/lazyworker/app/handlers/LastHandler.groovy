@@ -43,7 +43,7 @@ class LastHandler implements Handler {
 
     @Override
     String helpMessage() {
-        return null
+        return "Usage: /last"
     }
 
 }

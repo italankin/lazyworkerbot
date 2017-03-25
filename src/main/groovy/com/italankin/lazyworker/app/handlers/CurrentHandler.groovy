@@ -38,7 +38,7 @@ class CurrentHandler implements Handler {
 
     @Override
     String helpMessage() {
-        return null
+        return "Usage: /current"
     }
 
 }
