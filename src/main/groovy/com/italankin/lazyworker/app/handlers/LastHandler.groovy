@@ -2,8 +2,8 @@ package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
+import com.italankin.lazyworker.app.core.Request
 
 class LastHandler implements Handler {
 
@@ -21,10 +21,10 @@ class LastHandler implements Handler {
     }
 
     @Override
-    boolean handle(Command command) throws Exception {
-        List<Activity> activities = activityManager.getActivitiesByUserId(command.getSenderId(), LIMIT)
+    boolean handle(Request request) throws Exception {
+        List<Activity> activities = activityManager.getActivitiesByUserId(request.getSenderId(), LIMIT)
         if (activities.isEmpty()) {
-            return command.reply("No activities found.")
+            return request.response("No activities found.")
         } else {
             StringBuilder sb = new StringBuilder()
             sb.append("Last activities:")
@@ -37,7 +37,7 @@ class LastHandler implements Handler {
                 sb.append(activity.desc())
             }
             sb.append("\nTo see more inforation about specific activity use /show.")
-            return command.reply(sb.toString())
+            return request.response(sb.toString())
         }
     }
 

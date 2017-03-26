@@ -1,8 +1,8 @@
 package com.italankin.lazyworker.app.handlers
 
-import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
 import com.italankin.lazyworker.app.core.HandlerManager
+import com.italankin.lazyworker.app.core.Request
 
 class HelpHandler implements Handler {
 
@@ -18,20 +18,20 @@ class HelpHandler implements Handler {
     }
 
     @Override
-    boolean handle(Command command) throws Exception {
-        String args = command.getRawArgs()
+    boolean handle(Request request) throws Exception {
+        String args = request.getRawArgs()
         if (!args || args.isEmpty()) {
-            return command.reply(helpMessage())
+            return request.response(helpMessage())
         }
         if (handlers.containsKey(args)) {
             String message = handlers.get(args).helpMessage()
             if (message) {
-                return command.reply(message)
+                return request.response(message)
             } else {
                 return true
             }
         } else {
-            return command.reply(helpMessage())
+            return request.response(helpMessage())
         }
     }
 

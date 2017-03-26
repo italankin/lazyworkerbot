@@ -2,8 +2,8 @@ package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
+import com.italankin.lazyworker.app.core.Request
 
 class DeleteHandler implements Handler {
 
@@ -19,8 +19,8 @@ class DeleteHandler implements Handler {
     }
 
     @Override
-    boolean handle(Command command) throws Exception {
-        String rawArgs = command.getRawArgs()
+    boolean handle(Request request) throws Exception {
+        String rawArgs = request.getRawArgs()
         if (rawArgs != null) {
             List<Integer> ids = []
             try {
@@ -34,13 +34,13 @@ class DeleteHandler implements Handler {
             } catch (NumberFormatException e) {
                 return false
             }
-            int userId = command.getSenderId()
+            int userId = request.getSenderId()
             for (Integer id : ids) {
                 Activity activity = activityManager.deleteActivity(userId, id)
                 if (activity) {
-                    command.reply("Deleted activity:\n${activity.detail()}")
+                    request.response("Deleted activity:\n${activity.detail()}")
                 } else {
-                    command.reply("No activity with id=`$id` found.")
+                    request.response("No activity with id=`$id` found.")
                 }
             }
             return true

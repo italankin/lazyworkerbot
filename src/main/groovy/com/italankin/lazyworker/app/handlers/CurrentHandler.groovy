@@ -2,8 +2,8 @@ package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
+import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
 
 class CurrentHandler implements Handler {
@@ -20,10 +20,10 @@ class CurrentHandler implements Handler {
     }
 
     @Override
-    boolean handle(Command command) throws Exception {
-        Activity current = activityManager.getCurrentActivity(command.getSenderId())
+    boolean handle(Request request) throws Exception {
+        Activity current = activityManager.getCurrentActivity(request.getSenderId())
         if (current == null) {
-            return command.reply("No current activity.")
+            return request.response("No current activity.")
         } else {
             String msg = String.format("Activity %s started at _%s_.\nSession time: _%s_",
                     current.desc(),
@@ -32,7 +32,7 @@ class CurrentHandler implements Handler {
             if (current.comment != null && !current.comment.isEmpty()) {
                 msg = msg + "\n" + current.comment
             }
-            return command.reply(msg)
+            return request.response(msg)
         }
     }
 

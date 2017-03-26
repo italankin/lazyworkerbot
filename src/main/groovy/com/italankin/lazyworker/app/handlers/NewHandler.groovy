@@ -2,7 +2,7 @@ package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
+import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
 
 class NewHandler extends AbstractFinishHandler {
@@ -17,9 +17,9 @@ class NewHandler extends AbstractFinishHandler {
     }
 
     @Override
-    boolean handle(Command command) throws Exception {
-        int userId = command.getSenderId()
-        String rawArgs = command.getRawArgs()
+    boolean handle(Request request) throws Exception {
+        int userId = request.getSenderId()
+        String rawArgs = request.getRawArgs()
         if (rawArgs == null || rawArgs.isEmpty()) {
             rawArgs = "New activity"
         }
@@ -36,12 +36,12 @@ class NewHandler extends AbstractFinishHandler {
         if (name.length() > 50) {
             name = name.substring(0, 50)
         }
-        if (finish(command)) {
+        if (finish(request)) {
             // do not care
         }
         Activity activity = activityManager.startActivity(userId, name, DateUtils.currentTime(), comment)
         if (activity != null) {
-            return command.reply("Activity ${activity.desc()} started.\nUse /finish to finish.")
+            return request.response("Activity ${activity.desc()} started.\nUse /finish to finish.")
         } else {
             return false
         }

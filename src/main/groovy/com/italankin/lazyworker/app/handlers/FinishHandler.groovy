@@ -1,7 +1,7 @@
 package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
+import com.italankin.lazyworker.app.core.Request
 
 class FinishHandler extends AbstractFinishHandler {
 
@@ -15,9 +15,9 @@ class FinishHandler extends AbstractFinishHandler {
     }
 
     @Override
-    boolean handle(Command command) throws Exception {
-        if(!finish(command)) {
-            return command.reply("No current activity found.")
+    boolean handle(Request request) throws Exception {
+        if(!finish(request)) {
+            return request.response("No current activity found.")
         }
         return true
     }

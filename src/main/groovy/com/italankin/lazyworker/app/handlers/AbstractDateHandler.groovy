@@ -2,8 +2,8 @@ package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
+import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
 
 abstract class AbstractDateHandler implements Handler {
@@ -18,10 +18,10 @@ abstract class AbstractDateHandler implements Handler {
     }
 
     @Override
-    boolean handle(Command command) throws Exception {
+    boolean handle(Request request) throws Exception {
         long[] interval
         try {
-            interval = getInterval(command)
+            interval = getInterval(request)
         } catch (Exception e) {
             return false
         }
@@ -31,10 +31,10 @@ abstract class AbstractDateHandler implements Handler {
         long start = interval[0]
         long end = interval[1]
         if ((end - start) / DAY_MILLIS > INTERVAL_MAX) {
-            return command.reply("The interval should not exceed $INTERVAL_MAX days.")
+            return request.response("The interval should not exceed $INTERVAL_MAX days.")
         }
         boolean oneDay = (end - start) <= DAY_MILLIS
-        List<Activity> activities = activityManager.getActivitiesForInterval(command.getSenderId(), start, end)
+        List<Activity> activities = activityManager.getActivitiesForInterval(request.getSenderId(), start, end)
         if (activities.isEmpty()) {
             StringBuilder sb = new StringBuilder("No activities for *")
             sb.append(DateUtils.day(start))
@@ -43,7 +43,7 @@ abstract class AbstractDateHandler implements Handler {
                 sb.append(DateUtils.day(end - DAY_MILLIS))
             }
             sb.append("*.")
-            return command.reply(sb.toString())
+            return request.response(sb.toString())
         }
 
         StringBuilder sb = new StringBuilder()
@@ -59,7 +59,7 @@ abstract class AbstractDateHandler implements Handler {
         } else {
             printn(sb, activities)
         }
-        return command.reply(sb.toString())
+        return request.response(sb.toString())
     }
 
     private static void print1(StringBuilder sb, List<Activity> activities) {
@@ -123,6 +123,6 @@ abstract class AbstractDateHandler implements Handler {
         sb.append("_ -\n")
     }
 
-    protected abstract long[] getInterval(Command command)
+    protected abstract long[] getInterval(Request request)
 
 }

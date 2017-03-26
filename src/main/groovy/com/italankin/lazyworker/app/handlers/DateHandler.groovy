@@ -1,7 +1,7 @@
 package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
+import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
 
 import java.text.DateFormat
@@ -26,8 +26,8 @@ class DateHandler extends AbstractDateHandler {
     }
 
     @Override
-    protected long[] getInterval(Command command) throws Exception {
-        String rawArgs = command.getRawArgs()
+    protected long[] getInterval(Request request) throws Exception {
+        String rawArgs = request.getRawArgs()
         if (rawArgs == null || rawArgs.isEmpty()) {
             return null
         }

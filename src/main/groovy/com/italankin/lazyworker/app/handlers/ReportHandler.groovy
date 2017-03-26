@@ -2,10 +2,9 @@ package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
+import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
-import io.fouad.jtb.core.builders.ApiBuilder
 
 import java.text.DateFormat
 import java.text.ParseException
@@ -29,8 +28,8 @@ class ReportHandler implements Handler {
     }
 
     @Override
-    boolean handle(Command command) throws Exception {
-        String rawArgs = command.getRawArgs()
+    boolean handle(Request request) throws Exception {
+        String rawArgs = request.getRawArgs()
         if (!rawArgs || rawArgs.isEmpty()) {
             return false
         }
@@ -46,23 +45,24 @@ class ReportHandler implements Handler {
             switch (arg0) {
                 case "today":
                     long start = DateUtils.getStartOfDay(new Date())
-                    return report(command, start, start + DAY_MILLIS)
+                    return report(request, start, start + DAY_MILLIS)
                 case "week":
                     Calendar calendar = DateUtils.getZoneCalendar(new Date())
+                    calendar.setFirstDayOfWeek(Calendar.MONDAY)
                     long end = DateUtils.getStartOfDay(calendar.getTime()) + DAY_MILLIS
                     calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
                     long start = DateUtils.getStartOfDay(calendar.getTime())
-                    return report(command, start, end)
+                    return report(request, start, end)
                 case "month":
                     Calendar calendar = DateUtils.getZoneCalendar(new Date())
                     long end = DateUtils.getStartOfDay(calendar.getTime()) + DAY_MILLIS
                     calendar.set(Calendar.DATE, 1)
                     long start = DateUtils.getStartOfDay(calendar.getTime())
-                    return report(command, start, end)
+                    return report(request, start, end)
                 default:
                     if (arg0.length() == 8) {
                         long start = DateUtils.getStartOfDay(DATE_FORMAT.parse(arg0))
-                        return report(command, start, start + DAY_MILLIS)
+                        return report(request, start, start + DAY_MILLIS)
                     } else {
                         try {
                             int offset = Integer.parseInt(arg0)
@@ -70,7 +70,7 @@ class ReportHandler implements Handler {
                             long end = DateUtils.getStartOfDay(calendar.getTime())
                             calendar.add(Calendar.DAY_OF_MONTH, offset)
                             long start = DateUtils.getStartOfDay(calendar.getTime())
-                            return report(command, start, end)
+                            return report(request, start, end)
                         } catch (NumberFormatException e) {
                             return false
                         }
@@ -80,7 +80,7 @@ class ReportHandler implements Handler {
             try {
                 long start = DateUtils.getStartOfDay(DATE_FORMAT.parse(split[0]))
                 long end = DateUtils.getStartOfDay(DATE_FORMAT.parse(split[1]))
-                return report(command, start, end)
+                return report(request, start, end)
             } catch (ParseException e) {
                 return false
             }
@@ -98,8 +98,8 @@ class ReportHandler implements Handler {
                 "_preset_ - one of the following values: `today`, `week`, `month`"
     }
 
-    private boolean report(Command command, long start, long end) {
-        List<Activity> activities = activityManager.getActivitiesForInterval(command.getSenderId(), start, end)
+    private boolean report(Request request, long start, long end) {
+        List<Activity> activities = activityManager.getActivitiesForInterval(request.getSenderId(), start, end)
         boolean oneDay = (end - start) <= DAY_MILLIS
         if (activities.isEmpty()) {
             StringBuilder sb = new StringBuilder("No activities for *")
@@ -109,7 +109,7 @@ class ReportHandler implements Handler {
                 sb.append(DateUtils.day(end - DAY_MILLIS))
             }
             sb.append("*.")
-            return command.reply(sb.toString())
+            return request.response(sb.toString())
         }
         String name = "report_" + DateUtils.std(start)
         if (!oneDay) {
@@ -138,10 +138,7 @@ class ReportHandler implements Handler {
             sb.append(DateUtils.minutes(activity.duration()))
         }
         ByteArrayInputStream stream = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"))
-        return ApiBuilder.api(command.getApi())
-                .sendDocument(stream, name)
-                .toChatId(command.getSenderId())
-                .execute()
+        return request.response(stream, name)
     }
 
 }

@@ -4,7 +4,7 @@ interface Handler {
 
     String name()
 
-    boolean handle(Command command) throws Exception
+    boolean handle(Request request) throws Exception
 
     String helpMessage()
 

@@ -2,8 +2,8 @@ package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
+import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
 
 abstract class AbstractFinishHandler implements Handler {
@@ -14,9 +14,9 @@ abstract class AbstractFinishHandler implements Handler {
         this.activityManager = activityManager
     }
 
-    boolean finish(Command command) {
+    boolean finish(Request request) {
         long finishTime = DateUtils.currentTime()
-        Activity activity = activityManager.finishCurrentActivity(command.getSenderId(), finishTime)
+        Activity activity = activityManager.finishCurrentActivity(request.getSenderId(), finishTime)
         if (activity) {
             String msg = String.format("Activity %s finished at _%s_.\nSession time: _%s_",
                     activity.desc(),
@@ -25,7 +25,7 @@ abstract class AbstractFinishHandler implements Handler {
             if (activity.comment != null && !activity.comment.isEmpty()) {
                 msg = msg + "\n" + activity.comment
             }
-            return command.reply(msg)
+            return request.response(msg)
         } else {
             return false
         }

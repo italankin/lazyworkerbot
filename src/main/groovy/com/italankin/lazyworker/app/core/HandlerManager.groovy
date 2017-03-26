@@ -1,6 +1,11 @@
 package com.italankin.lazyworker.app.core
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 class HandlerManager {
+
+    private static final Logger LOG = LoggerFactory.getLogger(HandlerManager.class)
 
     private final LinkedHashMap<String, Handler> handlers = new LinkedHashMap<>()
     private final Handler fallback
@@ -18,24 +23,25 @@ class HandlerManager {
         return this
     }
 
-    void process(Command command) {
-        String name = command.getName()
+    void process(Request request) {
+        String name = request.getName()
         if (name == null || !handlers.containsKey(name)) {
-            fallback.handle(command)
+            LOG.info("No command found for name '$name'")
+            fallback.handle(request)
             return
         }
+        Handler handler = handlers.get(name)
         try {
-            Handler handler = handlers.get(name)
-            boolean handled = handler.handle(command)
+            boolean handled = handler.handle(request)
             if (!handled) {
                 String help = handler.helpMessage()
                 if (help) {
-                    command.reply(help)
+                    request.response(help)
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace()
-            fallback.handle(command)
+            LOG.error("Handler '${handler.name()}' failed to handle request with exception:", e)
+            fallback.handle(request)
         }
     }
 

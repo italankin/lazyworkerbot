@@ -1,8 +1,9 @@
 package com.italankin.lazyworker.app
 
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
+import com.italankin.lazyworker.app.backup.BackupManager
 import com.italankin.lazyworker.app.core.HandlerManager
+import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.handlers.*
 import io.fouad.jtb.core.JTelegramBot
 import io.fouad.jtb.core.TelegramBotApi
@@ -13,22 +14,27 @@ import io.fouad.jtb.core.beans.InlineQuery
 import io.fouad.jtb.core.beans.Message
 import io.fouad.jtb.webhook.WebhookServer
 import io.fouad.jtb.webhook.enums.TelegramPort
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class App implements UpdateHandler {
 
     private static final String BOT_NAME = "Lazy Worker Bot"
-    private static final String DB_FILE = "lazyworker.db"
+
+    private static final Logger LOG = LoggerFactory.getLogger(App.class)
 
     private final WebhookServer webhookServer
     private final ActivityManager activityManager
+    private final BackupManager backupManager
 
     private final HandlerManager handlerManager
     private final JTelegramBot bot
 
-    App(String token, String hostname) {
-        bot = new JTelegramBot(BOT_NAME, token, this)
-        webhookServer = new WebhookServer(bot, hostname, TelegramPort.PORT_8443, token)
-        activityManager = new ActivityManager(DB_FILE)
+    App(Config config) {
+        bot = new JTelegramBot(BOT_NAME, config.token, this)
+        webhookServer = new WebhookServer(bot, config.hostname, TelegramPort.PORT_8443, config.token)
+        activityManager = new ActivityManager(config.db)
+        backupManager = new BackupManager(config)
         handlerManager = new HandlerManager(new StartHandler())
                 .add(new FinishHandler(activityManager))
                 .add(new CurrentHandler(activityManager))
@@ -46,18 +52,38 @@ class App implements UpdateHandler {
     }
 
     void start() throws Exception {
-        System.out.println("Start...")
+        LOG.info("Start...")
         activityManager.prepare()
         webhookServer.useGeneratedSelfSignedSslCertificate()
         webhookServer.registerWebhook()
         webhookServer.startAsync()
-        System.out.println("Started")
+        backupManager.start()
+        LOG.info("Started")
     }
 
     void stop() throws Exception {
-        System.out.println("Stop...")
+        LOG.info("Stop...")
         webhookServer.stop()
-        System.out.println("Stoppped")
+        backupManager.stop()
+        LOG.info("Stoppped")
+    }
+
+    static class Config {
+
+        String token
+        String hostname
+        String db
+        String backupDir
+
+        Config(Properties props) {
+            token = props.getProperty("com.italankin.lazyworker.bot.token")
+            hostname = props.getProperty("com.italankin.lazyworker.webhook.hostname") ?:
+                    InetAddress.getLocalHost().hostAddress
+            db = new File(props.getProperty("com.italankin.lazyworker.db"))
+                    .getAbsolutePath()
+            backupDir = new File(props.getProperty("com.italankin.lazyworker.backup.dir") ?: "./backups/")
+                    .getAbsolutePath()
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -66,7 +92,9 @@ class App implements UpdateHandler {
 
     @Override
     void onMessageReceived(TelegramBotApi telegramBotApi, int i, Message message) {
-        handlerManager.process(new Command(telegramBotApi, i, message))
+        Request request = new Request(telegramBotApi, i, message)
+        LOG.info("Received request:\n$request")
+        handlerManager.process(request)
     }
 
     @Override

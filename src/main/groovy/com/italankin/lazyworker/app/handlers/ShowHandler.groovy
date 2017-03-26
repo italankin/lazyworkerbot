@@ -2,8 +2,8 @@ package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
+import com.italankin.lazyworker.app.core.Request
 
 class ShowHandler implements Handler {
 
@@ -19,8 +19,8 @@ class ShowHandler implements Handler {
     }
 
     @Override
-    boolean handle(Command command) throws Exception {
-        String rawArgs = command.getRawArgs()
+    boolean handle(Request request) throws Exception {
+        String rawArgs = request.getRawArgs()
         if (rawArgs == null || rawArgs.isEmpty()) {
             return false
         }
@@ -30,11 +30,11 @@ class ShowHandler implements Handler {
         } catch (NumberFormatException e) {
             return false
         }
-        Activity activity = activityManager.getActivity(command.getSenderId(), id)
+        Activity activity = activityManager.getActivity(request.getSenderId(), id)
         if (activity == null) {
-            return command.reply("No activity found.")
+            return request.response("No activity found.")
         }
-        return command.reply(activity.detail())
+        return request.response(activity.detail())
     }
 
     @Override

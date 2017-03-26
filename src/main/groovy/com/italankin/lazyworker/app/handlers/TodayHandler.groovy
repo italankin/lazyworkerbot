@@ -1,7 +1,7 @@
 package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
+import com.italankin.lazyworker.app.core.Request
 
 class TodayHandler extends DateHandler {
 
@@ -15,7 +15,7 @@ class TodayHandler extends DateHandler {
     }
 
     @Override
-    protected long[] getInterval(Command command) {
+    protected long[] getInterval(Request request) {
         return intervalWithOffset(new Date(), 1)
     }
 

@@ -1,7 +1,7 @@
 package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.ActivityManager
-import com.italankin.lazyworker.app.core.Command
+import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
 
 class MonthHandler extends DateHandler {
@@ -16,7 +16,7 @@ class MonthHandler extends DateHandler {
     }
 
     @Override
-    protected long[] getInterval(Command command) {
+    protected long[] getInterval(Request request) {
         Calendar calendar = DateUtils.getZoneCalendar(new Date())
         long end = DateUtils.getStartOfDay(calendar.getTime()) + DAY_MILLIS
         calendar.set(Calendar.DATE, 1)

@@ -1,7 +1,7 @@
 package com.italankin.lazyworker.app.handlers
 
-import com.italankin.lazyworker.app.core.Command
 import com.italankin.lazyworker.app.core.Handler
+import com.italankin.lazyworker.app.core.Request
 
 class StartHandler implements Handler {
 
@@ -11,8 +11,8 @@ class StartHandler implements Handler {
     }
 
     @Override
-    boolean handle(Command command) throws Exception {
-        return command.reply("Use /help to see list of available commands.")
+    boolean handle(Request request) throws Exception {
+        return request.response("Use /help to see list of available commands.")
     }
 
     @Override
