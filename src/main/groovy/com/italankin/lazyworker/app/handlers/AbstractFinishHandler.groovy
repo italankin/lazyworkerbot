@@ -5,6 +5,7 @@ import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Handler
 import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
+import com.italankin.lazyworker.app.utils.StringUtils
 
 abstract class AbstractFinishHandler implements Handler {
 
@@ -23,7 +24,7 @@ abstract class AbstractFinishHandler implements Handler {
                     DateUtils.detail(finishTime),
                     DateUtils.pretty(activity.duration()))
             if (activity.comment != null && !activity.comment.isEmpty()) {
-                msg = msg + "\n" + activity.comment
+                msg = msg + "\n" + StringUtils.escapeMarkdown(activity.comment)
             }
             return request.response(msg)
         } else {

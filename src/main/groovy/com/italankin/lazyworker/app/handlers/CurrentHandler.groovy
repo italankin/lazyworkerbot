@@ -5,6 +5,7 @@ import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Handler
 import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
+import com.italankin.lazyworker.app.utils.StringUtils
 
 class CurrentHandler implements Handler {
 
@@ -30,7 +31,7 @@ class CurrentHandler implements Handler {
                     DateUtils.detail(current.startTime),
                     DateUtils.pretty(current.duration()))
             if (current.comment != null && !current.comment.isEmpty()) {
-                msg = msg + "\n" + current.comment
+                msg = msg + "\n" + StringUtils.escapeMarkdown(current.comment)
             }
             return request.response(msg)
         }

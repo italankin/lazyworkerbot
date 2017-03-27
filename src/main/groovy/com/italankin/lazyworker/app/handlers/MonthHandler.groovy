@@ -26,7 +26,7 @@ class MonthHandler extends DateHandler {
 
     @Override
     String helpMessage() {
-        return "/month"
+        return "Usage: /month"
     }
 
 }

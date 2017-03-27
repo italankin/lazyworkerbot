@@ -1,6 +1,7 @@
 package com.italankin.lazyworker.app.activity
 
 import com.italankin.lazyworker.app.utils.DateUtils
+import com.italankin.lazyworker.app.utils.StringUtils
 
 class Activity {
 
@@ -19,7 +20,7 @@ class Activity {
     }
 
     String desc() {
-        return "`$id` *$name*"
+        return "`$id` *${name.replaceAll("\\*","\\*")}*"
     }
 
     String detail() {
@@ -36,7 +37,7 @@ class Activity {
         sb.append("_")
         if (comment != null) {
             sb.append("\n*Comment*: ")
-            sb.append(comment)
+            sb.append(StringUtils.escapeMarkdown(comment))
         }
         return sb.toString()
     }

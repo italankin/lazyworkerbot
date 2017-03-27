@@ -59,6 +59,7 @@ class Request {
     }
 
     Message response(InputStream is, String name) {
+        LOG.info("Sending document: $name")
         return response(chatId, is, name)
     }
 
