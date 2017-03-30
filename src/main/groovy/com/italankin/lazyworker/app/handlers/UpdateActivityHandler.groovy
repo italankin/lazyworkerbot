@@ -45,7 +45,7 @@ class UpdateActivityHandler implements Handler {
         if (activity) {
             return request.response(activity.detail())
         } else {
-            return request.response("No activity found.")
+            return request.response("No activity with id=`$id` found.")
         }
     }
 

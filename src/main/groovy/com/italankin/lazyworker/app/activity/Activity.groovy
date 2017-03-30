@@ -20,7 +20,7 @@ class Activity {
     }
 
     String desc() {
-        return "`$id` *${name.replaceAll("\\*","\\*")}*"
+        return "`$id` *${name.replaceAll("\\*", "\\*")}*"
     }
 
     String detail() {
@@ -44,6 +44,18 @@ class Activity {
 
     boolean isCurrent() {
         return finishTime <= 0
+    }
+
+    @Override
+    String toString() {
+        return "Activity{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", startTime=" + startTime +
+                ", finishTime=" + finishTime +
+                ", name='" + name + '\'' +
+                ", comment='" + comment + '\'' +
+                '}'
     }
 
 }

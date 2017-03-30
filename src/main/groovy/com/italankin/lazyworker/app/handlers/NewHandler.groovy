@@ -36,11 +36,15 @@ class NewHandler extends AbstractFinishHandler {
         if (name.length() > 50) {
             name = name.substring(0, 50)
         }
-        if (finish(request)) {
+        if (finishCurrentActivity(request)) {
             // do not care
         }
+        return startActivity(request, userId, name, comment)
+    }
+
+    protected boolean startActivity(Request request, int userId, String name, String comment) {
         Activity activity = activityManager.startActivity(userId, name, DateUtils.currentTime(), comment)
-        if (activity != null) {
+        if (activity) {
             return request.response("Activity ${activity.desc()} started.\nUse /finish to finish.")
         } else {
             return false
@@ -50,7 +54,7 @@ class NewHandler extends AbstractFinishHandler {
     @Override
     String helpMessage() {
         return "Usage: /new \\[name] \\[\\*comment]\n\n" +
-                "_name_ - name of the new activity\n" +
+                "_name_ - name of the new activity (max: 50 characters)\n" +
                 "_comment_ - optional comment, *must* start on the new line"
     }
 

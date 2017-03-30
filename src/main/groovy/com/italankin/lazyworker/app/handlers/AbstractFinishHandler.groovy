@@ -15,7 +15,7 @@ abstract class AbstractFinishHandler implements Handler {
         this.activityManager = activityManager
     }
 
-    boolean finish(Request request) {
+    boolean finishCurrentActivity(Request request) {
         long finishTime = DateUtils.currentTime()
         Activity activity = activityManager.finishCurrentActivity(request.getSenderId(), finishTime)
         if (activity) {

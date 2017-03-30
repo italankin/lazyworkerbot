@@ -16,10 +16,7 @@ class FinishHandler extends AbstractFinishHandler {
 
     @Override
     boolean handle(Request request) throws Exception {
-        if(!finish(request)) {
-            return request.response("No current activity found.")
-        }
-        return true
+        return !finishCurrentActivity(request) || request.response("No current activity found.")
     }
 
     @Override

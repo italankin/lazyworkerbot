@@ -7,7 +7,7 @@ import com.italankin.lazyworker.app.core.Request
 
 class LastHandler implements Handler {
 
-    private static final int LIMIT = 20
+    private static final int LIMIT = 5
 
     private final ActivityManager activityManager
 
@@ -34,7 +34,7 @@ class LastHandler implements Handler {
                 sb.append("\n")
                 sb.append(i + 1)
                 sb.append(". ")
-                sb.append(activity.desc())
+                sb.append(activity.detail())
             }
             sb.append("\nTo see more inforation about specific activity use /show.")
             return request.response(sb.toString())

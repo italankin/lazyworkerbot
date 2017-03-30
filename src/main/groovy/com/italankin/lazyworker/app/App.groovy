@@ -39,6 +39,7 @@ class App implements UpdateHandler {
                 .add(new FinishHandler(activityManager))
                 .add(new CurrentHandler(activityManager))
                 .add(new NewHandler(activityManager))
+                .add(new ResumeHandler(activityManager))
                 .add(new TodayHandler(activityManager))
                 .add(new DateHandler(activityManager))
                 .add(new ShowHandler(activityManager))

@@ -33,11 +33,15 @@ class Request {
         }
         int si = text.indexOf(' ')
         if (si == -1) {
-            name = text.substring(1).toLowerCase()
+            String command = text.substring(1).toLowerCase()
+            int i = command.indexOf('@')
+            name = i != -1 ? command.substring(0, i) : command
             rawArgs = null
             return
         }
-        name = text.substring(1, si).toLowerCase()
+        String command = text.substring(1, si).toLowerCase()
+        int i = command.indexOf('@')
+        name = i != -1 ? command.substring(0, i) : command
         rawArgs = text.substring(si).trim()
     }
 

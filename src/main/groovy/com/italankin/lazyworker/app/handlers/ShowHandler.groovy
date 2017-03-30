@@ -32,7 +32,7 @@ class ShowHandler implements Handler {
         }
         Activity activity = activityManager.getActivity(request.getSenderId(), id)
         if (activity == null) {
-            return request.response("No activity found.")
+            return request.response("No activity with id=`$id` found.")
         }
         return request.response(activity.detail())
     }
@@ -40,7 +40,7 @@ class ShowHandler implements Handler {
     @Override
     String helpMessage() {
         return "Usage: /show id\n\n" +
-                "_id_ - id of the activity to delete"
+                "_id_ - id of the activity to show"
     }
 
 }
