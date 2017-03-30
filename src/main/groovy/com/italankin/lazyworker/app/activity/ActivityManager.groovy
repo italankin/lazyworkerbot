@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 
 import java.sql.ResultSet
 import java.sql.SQLException
+import java.util.concurrent.ConcurrentHashMap
 
 class ActivityManager {
 
@@ -19,17 +20,129 @@ class ActivityManager {
                     "comment TEXT DEFAULT NULL" +
                     ")"
 
+    private static final String CREATE_TABLE_USERS =
+            "CREATE TABLE IF NOT EXISTS users (" +
+                    "id INTEGER PRIMARY KEY, " +
+                    "level INTEGER DEFAULT ${User.LEVEL_USER}" +
+                    ")"
+
+    private static final String CREATE_TABLE_USER_PREFERENCES =
+            "CREATE TABLE IF NOT EXISTS user_preferences (" +
+                    "user_id INTEGER NOT NULL, " +
+                    "key TEXT NOT NULL, " +
+                    "value TEXT NOT NULL" +
+                    ")"
+
     private static final Logger LOG = LoggerFactory.getLogger(ActivityManager.class)
 
     private final Sql SQL
+    private final ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>()
 
     ActivityManager(String name) {
         SQL = Sql.newInstance("jdbc:sqlite:$name", "org.sqlite.JDBC")
     }
 
     void prepare() {
+        log(CREATE_TABLE_USERS, null)
+        SQL.execute(CREATE_TABLE_USERS)
+
+        log(CREATE_TABLE_ACTIVITIES, null)
         SQL.execute(CREATE_TABLE_ACTIVITIES)
+
+        log(CREATE_TABLE_USER_PREFERENCES, null)
+        SQL.execute(CREATE_TABLE_USER_PREFERENCES)
+
+        loadUsers()
     }
+
+    // Users
+
+    void loadUsers() {
+        users.clear()
+
+        String sql = "SELECT * FROM users"
+        log(sql, null)
+
+        SQL.query(sql) { ResultSet rs ->
+            while (rs.next()) {
+                User user = new User(rs.getInt("id"), rs.getInt("level"))
+                users.put(user.id, user)
+            }
+        }
+    }
+
+    User createUser(int userId, int level) {
+        if (users.containsKey(userId)) {
+            LOG.info("Attempted to create new user userId=$userId, but found one in cache")
+            return users.get(userId)
+        }
+        String sql = "INSERT INTO users (telegram_id, level) VALUES (?, ?)"
+        def params = [userId, level]
+        log(sql, params)
+
+        def keys = SQL.executeInsert(sql, params)
+        Integer id = (Integer) keys[0][0]
+        if (id) {
+            User user = new User(id, level)
+            users.put(userId, user)
+            return user
+        } else {
+            return null
+        }
+    }
+
+    User getUser(int userId) {
+        if (users.containsKey(userId)) {
+            LOG.info("User userId=$userId found")
+            return users.get(userId)
+        }
+        return createUser(userId, User.LEVEL_USER)
+    }
+
+    // User preferences
+
+    User.Preference setUserPreference(int userId, String key, String value) {
+        User.Preference preference = getUserPreference(userId, key)
+        if (preference && value) {
+            if (preference.value == value) {
+                return preference
+            }
+
+            String sql = "UPDATE user_preferences SET value=? WHERE user_id=? AND key=?"
+            def params = [value, userId, key]
+            log(sql, params)
+
+            int update = SQL.executeUpdate(sql, params)
+            if (update > 0) {
+                return new User.Preference(key, value)
+            }
+        }
+
+        String sql = "INSERT INTO user_preferences (user_id, key, value) VALUES (?, ?, ?)"
+        def params = [userId, key, value]
+        log(sql, params)
+
+        def keys = SQL.executeInsert(sql, params)
+        Integer id = (Integer) keys[0][0]
+        if (id) {
+            return new User.Preference(key, value)
+        }
+        return null
+    }
+
+    User.Preference getUserPreference(int userId, String key) {
+        String sql = "SELECT key, value FROM user_preferences WHERE user_id=? AND key=?"
+        def params = [userId, key]
+        log(sql, params)
+
+        User.Preference preference = null
+        SQL.query(sql, params) { ResultSet rs ->
+            preference = rs.next() ? new User.Preference(rs.getString("key"), rs.getString("value")) : null
+        }
+        return preference
+    }
+
+    // Activities
 
     Activity startActivity(int userId, String name, long startTime, String comment) {
         String sql = "INSERT INTO activities (user_id, name, start_time, comment) VALUES (?, ?, ?, ?)"
@@ -39,7 +152,7 @@ class ActivityManager {
         def keys = SQL.executeInsert(sql, params)
         Integer id = (Integer) keys[0][0]
         if (id) {
-            return new Activity(id: id, userId: userId, name: name, startTime: startTime, comment: comment)
+            return new Activity(id, userId, name, startTime, -1, comment)
         } else {
             return null
         }
@@ -79,8 +192,13 @@ class ActivityManager {
 
             int update = SQL.executeUpdate(sql, params)
             if (update > 0) {
-                activity.finishTime = finishTime
-                return activity
+                return new Activity(
+                        activity.id,
+                        activity.userId,
+                        activity.name,
+                        activity.startTime,
+                        finishTime,
+                        activity.comment)
             }
         }
         return null
@@ -151,14 +269,13 @@ class ActivityManager {
     }
 
     static Activity parseActivity(ResultSet rs) throws SQLException {
-        Activity activity = new Activity()
-        activity.id = rs.getInt("id")
-        activity.userId = rs.getInt("user_id")
-        activity.name = rs.getString("name")
-        activity.startTime = rs.getLong("start_time")
-        activity.finishTime = rs.getLong("finish_time")
-        activity.comment = rs.getString("comment")
-        return activity
+        return new Activity(
+                rs.getInt("id"),
+                rs.getInt("user_id"),
+                rs.getString("name"),
+                rs.getLong("start_time"),
+                rs.getLong("finish_time"),
+                rs.getString("comment"))
     }
 
     private static log(String sql, List<Object> params) {

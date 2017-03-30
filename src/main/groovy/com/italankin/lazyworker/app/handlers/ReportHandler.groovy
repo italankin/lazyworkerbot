@@ -2,6 +2,7 @@ package com.italankin.lazyworker.app.handlers
 
 import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
+import com.italankin.lazyworker.app.activity.User
 import com.italankin.lazyworker.app.core.Handler
 import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
@@ -11,6 +12,10 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 
 class ReportHandler implements Handler {
+
+    static final String PREF_REPORT_CSV_HEADER = "report.csv.header"
+
+    static final String DEFAULT_CSV_HEADER = "Date;Name;Activity;Spent time (min)"
 
     protected static final long DAY_MILLIS = 1000 * 60 * 60 * 24
 
@@ -99,7 +104,8 @@ class ReportHandler implements Handler {
     }
 
     private boolean report(Request request, long start, long end) {
-        List<Activity> activities = activityManager.getActivitiesForInterval(request.getSenderId(), start, end)
+        int userId = request.getSenderId()
+        List<Activity> activities = activityManager.getActivitiesForInterval(userId, start, end)
         boolean oneDay = (end - start) <= DAY_MILLIS
         if (activities.isEmpty()) {
             StringBuilder sb = new StringBuilder("No activities for *")
@@ -117,7 +123,8 @@ class ReportHandler implements Handler {
         }
         name += ".csv"
         StringBuilder sb = new StringBuilder()
-        sb.append("Дата;Задача;Деятельность;Время в минутах")
+        User.Preference preference = activityManager.getUserPreference(userId, PREF_REPORT_CSV_HEADER)
+        sb.append(preference?.value ?: DEFAULT_CSV_HEADER)
         for (Activity activity : activities) {
             if (activity.isCurrent()) {
                 continue

@@ -5,12 +5,21 @@ import com.italankin.lazyworker.app.utils.StringUtils
 
 class Activity {
 
-    int id
-    int userId
-    long startTime
-    long finishTime
-    String name
-    String comment
+    final int id
+    final int userId
+    final long startTime
+    final long finishTime
+    final String name
+    final String comment
+
+    Activity(int id, int userId, String name, long startTime, long finishTime, String comment) {
+        this.id = id
+        this.userId = userId
+        this.startTime = startTime
+        this.finishTime = finishTime
+        this.name = name
+        this.comment = comment
+    }
 
     long duration() {
         if (!isCurrent()) {

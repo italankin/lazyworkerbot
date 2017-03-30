@@ -35,7 +35,7 @@ class App implements UpdateHandler {
         webhookServer = new WebhookServer(bot, config.hostname, TelegramPort.PORT_8443, config.token)
         activityManager = new ActivityManager(config.db)
         backupManager = new BackupManager(config)
-        handlerManager = new HandlerManager(new StartHandler())
+        handlerManager = new HandlerManager(new StartHandler(activityManager))
                 .add(new FinishHandler(activityManager))
                 .add(new CurrentHandler(activityManager))
                 .add(new NewHandler(activityManager))
@@ -49,6 +49,7 @@ class App implements UpdateHandler {
                 .add(new MonthHandler(activityManager))
                 .add(new WeekHandler(activityManager))
                 .add(new ReportHandler(activityManager))
+                .add(new SetPropertyHandler(activityManager))
         handlerManager.add(new HelpHandler(handlerManager))
     }
 
