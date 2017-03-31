@@ -164,7 +164,7 @@ class ActivityManager {
         log(sql, params)
 
         Activity a = null
-        this.SQL.query(sql, params) { ResultSet rs ->
+        SQL.query(sql, params) { ResultSet rs ->
             a = rs.next() ? parseActivity(rs) : null
         }
         return a
