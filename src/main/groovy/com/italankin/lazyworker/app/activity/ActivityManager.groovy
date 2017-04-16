@@ -99,6 +99,10 @@ class ActivityManager {
         return createUser(userId, User.LEVEL_USER)
     }
 
+    List<User> getAllUsers() {
+        return new ArrayList<>(users.values())
+    }
+
     // User preferences
 
     User.Preference setUserPreference(int userId, String key, String value) {

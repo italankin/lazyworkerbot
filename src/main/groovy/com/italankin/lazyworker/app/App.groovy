@@ -5,6 +5,8 @@ import com.italankin.lazyworker.app.backup.BackupManager
 import com.italankin.lazyworker.app.core.HandlerManager
 import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.handlers.*
+import com.italankin.lazyworker.app.handlers.owner.SetPreferenceHandler
+import com.italankin.lazyworker.app.handlers.owner.UsersHandler
 import io.fouad.jtb.core.JTelegramBot
 import io.fouad.jtb.core.TelegramBotApi
 import io.fouad.jtb.core.UpdateHandler
@@ -49,7 +51,8 @@ class App implements UpdateHandler {
                 .add(new MonthHandler(activityManager))
                 .add(new WeekHandler(activityManager))
                 .add(new ReportHandler(activityManager))
-                .add(new SetPropertyHandler(activityManager))
+                .add(new SetPreferenceHandler(activityManager))
+                .add(new UsersHandler(activityManager))
         handlerManager.add(new HelpHandler(handlerManager))
     }
 

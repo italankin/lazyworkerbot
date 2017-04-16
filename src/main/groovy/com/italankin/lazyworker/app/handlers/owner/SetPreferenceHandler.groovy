@@ -1,21 +1,21 @@
-package com.italankin.lazyworker.app.handlers
+package com.italankin.lazyworker.app.handlers.owner
 
 import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.activity.User
 import com.italankin.lazyworker.app.core.Handler
 import com.italankin.lazyworker.app.core.Request
 
-class SetPropertyHandler implements Handler {
+class SetPreferenceHandler implements Handler {
 
     private final ActivityManager activityManager
 
-    SetPropertyHandler(ActivityManager activityManager) {
+    SetPreferenceHandler(ActivityManager activityManager) {
         this.activityManager = activityManager
     }
 
     @Override
     String name() {
-        return "owner_setpreference"
+        return "setp"
     }
 
     @Override
