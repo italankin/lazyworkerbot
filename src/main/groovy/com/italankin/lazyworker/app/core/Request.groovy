@@ -101,6 +101,7 @@ class Request {
                 ", name='$name'" +
                 ", rawArgs='$rawArgs'" +
                 ", senderId='$senderId'" +
+                ", message='${message.getText()}'" +
                 '}'
     }
 
