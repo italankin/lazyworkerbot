@@ -76,7 +76,7 @@ class ActivityManager {
             LOG.info("Attempted to create new user userId=$userId, but found one in cache")
             return users.get(userId)
         }
-        String sql = "INSERT INTO users (telegram_id, level) VALUES (?, ?)"
+        String sql = "INSERT INTO users (id, level) VALUES (?, ?)"
         def params = [userId, level]
         log(sql, params)
 
