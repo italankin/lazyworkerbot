@@ -28,8 +28,12 @@ class Activity {
         return DateUtils.currentTime() - startTime
     }
 
+    String name() {
+        return StringUtils.escapeMarkdown(name)
+    }
+
     String desc() {
-        return "`$id` *${name.replaceAll("\\*", "\\*")}*"
+        return "`$id` *${name()}*"
     }
 
     String detail() {

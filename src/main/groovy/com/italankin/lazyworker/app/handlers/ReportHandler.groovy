@@ -132,7 +132,7 @@ class ReportHandler implements Handler {
             sb.append("\n")
             sb.append(DateUtils.std(activity.startTime))
             sb.append(";")
-            sb.append(activity.name)
+            sb.append(activity.name())
             sb.append(";")
             if (activity.comment) {
                 String s = activity.comment
