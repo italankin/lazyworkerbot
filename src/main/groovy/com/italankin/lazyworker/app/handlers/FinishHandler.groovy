@@ -16,7 +16,8 @@ class FinishHandler extends AbstractFinishHandler {
 
     @Override
     boolean handle(Request request) throws Exception {
-        return finishCurrentActivity(request) || request.response("No current activity found.")
+        return finishCurrentActivity(request.rawArgs, request.getSenderId(), request.getApi()) ||
+                request.response("No current activity found.")
     }
 
     @Override

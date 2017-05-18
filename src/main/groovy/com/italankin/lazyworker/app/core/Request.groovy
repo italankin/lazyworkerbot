@@ -1,6 +1,7 @@
 package com.italankin.lazyworker.app.core
 
 import io.fouad.jtb.core.TelegramBotApi
+import io.fouad.jtb.core.beans.CallbackQuery
 import io.fouad.jtb.core.beans.Message
 import io.fouad.jtb.core.builders.ApiBuilder
 import io.fouad.jtb.core.enums.ParseMode
@@ -14,18 +15,28 @@ class Request {
     private final TelegramBotApi api
     private final int updateId
     private final Message message
+    private final CallbackQuery callbackQuery
     private final String name
     private final String rawArgs
     private final int senderId
     private final long chatId
 
     Request(TelegramBotApi api, int updateId, Message message) {
+        this(api, updateId, message, null)
+    }
+
+    Request(TelegramBotApi api, int updateId, CallbackQuery callbackQuery) {
+        this(api, updateId, callbackQuery.getMessage(), callbackQuery)
+    }
+
+    Request(TelegramBotApi api, int updateId, Message message, CallbackQuery callbackQuery) {
         this.api = api
         this.updateId = updateId
         this.message = message
-        this.senderId = message.getFrom().getId()
+        this.senderId = callbackQuery?.getFrom()?.getId() ?: message.getFrom().getId()
         this.chatId = message.getChat().getId()
-        String text = message.getText()
+        this.callbackQuery = null
+        String text = callbackQuery?.data ?: message.getText()
         if (text[0] != '/') {
             name = null
             rawArgs = null
@@ -55,7 +66,7 @@ class Request {
 
     Message response(long chatId, String message, ParseMode mode) {
         LOG.info("Sending message:\n$message")
-        return ApiBuilder.api(api)
+        return api()
                 .sendMessage(message)
                 .toChatId(chatId)
                 .parseMessageAs(mode)
@@ -68,10 +79,14 @@ class Request {
     }
 
     Message response(long chatId, InputStream is, String name) {
-        return ApiBuilder.api(api)
+        return api()
                 .sendDocument(is, name)
                 .toChatId(chatId)
                 .execute()
+    }
+
+    ApiBuilder.ApiTopLevel api() {
+        return ApiBuilder.api(api)
     }
 
     TelegramBotApi getApi() {
@@ -80,6 +95,10 @@ class Request {
 
     Message getMessage() {
         return message
+    }
+
+    CallbackQuery getCallbackQuery() {
+        return callbackQuery
     }
 
     String getName() {

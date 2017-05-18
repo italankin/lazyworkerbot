@@ -121,6 +121,9 @@ class App implements UpdateHandler {
 
     @Override
     void onCallbackQueryReceived(TelegramBotApi telegramBotApi, int i, CallbackQuery callbackQuery) {
+        Request request = new Request(telegramBotApi, i, callbackQuery)
+        LOG.info("Received request:\n$request")
+        handlerManager.process(request)
     }
 
 }

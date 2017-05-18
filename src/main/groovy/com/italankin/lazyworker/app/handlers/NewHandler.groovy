@@ -4,8 +4,16 @@ import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
+import io.fouad.jtb.core.beans.ReplyMarkup
+import io.fouad.jtb.core.builders.InlineKeyboardButtonBuilder
+import io.fouad.jtb.core.builders.ReplyMarkupBuilder
+import io.fouad.jtb.core.enums.ParseMode
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class NewHandler extends AbstractFinishHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(NewHandler.class)
 
     NewHandler(ActivityManager activityManager) {
         super(activityManager)
@@ -36,7 +44,7 @@ class NewHandler extends AbstractFinishHandler {
         if (name.length() > 50) {
             name = name.substring(0, 50)
         }
-        if (finishCurrentActivity(request)) {
+        if (finishCurrentActivity(null, request.getSenderId(), request.api)) {
             // do not care
         }
         return startActivity(request, userId, name, comment)
@@ -45,7 +53,22 @@ class NewHandler extends AbstractFinishHandler {
     protected boolean startActivity(Request request, int userId, String name, String comment) {
         Activity activity = activityManager.startActivity(userId, name, DateUtils.currentTime(), comment)
         if (activity) {
-            return request.response("Activity ${activity.desc()} started.\nUse /finish to finish.")
+            ReplyMarkup markup = ReplyMarkupBuilder.attachInlineKeyboard(
+                    InlineKeyboardButtonBuilder.newRow()
+                            .newButton("Finish")
+                            .withCallbackData("/finish ${activity.id}")
+                            .newButton("Show")
+                            .withCallbackData("/show ${activity.id}")
+                            .newButton("Resume")
+                            .withCallbackData("/resume ${activity.id}")
+                            .build())
+                    .toReplyMarkup()
+            return request.api()
+                    .sendMessage("Activity ${activity.desc()} started.\nUse /finish to finish.")
+                    .toChatId(request.getSenderId())
+                    .applyReplyMarkup(markup)
+                    .parseMessageAs(ParseMode.MARKDOWN)
+                    .execute()
         } else {
             return false
         }
