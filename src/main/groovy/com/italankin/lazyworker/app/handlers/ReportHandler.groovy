@@ -15,7 +15,7 @@ class ReportHandler implements Handler {
 
     static final String PREF_REPORT_CSV_HEADER = "report.csv.header"
 
-    static final String DEFAULT_CSV_HEADER = "Date;Name;Activity;Spent time (min)"
+    static final String DEFAULT_CSV_HEADER = "Date;Name;Activity;Spent time (hrs)"
 
     protected static final long DAY_MILLIS = 1000 * 60 * 60 * 24
 
@@ -142,7 +142,16 @@ class ReportHandler implements Handler {
                 sb.append(s)
             }
             sb.append(";")
-            sb.append(DateUtils.minutes(activity.duration()))
+            long minutes
+            if (activity.totalTime >= 0) {
+                minutes = DateUtils.minutes(activity.totalTime)
+            } else {
+                minutes = DateUtils.minutes(activity.duration())
+            }
+            String time = BigDecimal.valueOf(minutes / 60d)
+                    .setScale(2, BigDecimal.ROUND_HALF_UP)
+                    .toPlainString()
+            sb.append(time)
         }
         ByteArrayInputStream stream = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"))
         return request.response(stream, name)

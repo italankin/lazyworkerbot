@@ -11,6 +11,7 @@ class Activity {
     final long finishTime
     final String name
     final String comment
+    long totalTime = -1
 
     Activity(int id, int userId, String name, long startTime, long finishTime, String comment) {
         this.id = id
