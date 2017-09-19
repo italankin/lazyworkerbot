@@ -67,7 +67,7 @@ class AlterHandler extends CurrentHandler {
                 "_id_ - id of the activity\n" +
                 "_start_ - new start time (unix epoch millis)\n" +
                 "_end_ - new end time (unix epoch millis)\n\n" +
-                "_start_ must be less than _end_." +
+                "_start_ must be less than _end_. " +
                 "If _start_ or _end_ set to `0`, that time will not be changed.\n"
     }
 }
