@@ -262,6 +262,18 @@ class ActivityManager {
         return getActivity(userId, id)
     }
 
+    Activity updateActivity(int userId, int id, long start, long end) {
+        String sql = "UPDATE activities SET start_time=?, finish_time=? WHERE user_id=? AND id=?"
+        def params = [start, end, userId, id]
+        log(sql, params)
+
+        int c = SQL.executeUpdate(sql, params)
+        if (c == 0) {
+            return null
+        }
+        return getActivity(userId, id)
+    }
+
     List<Activity> search(int userId, String query) {
         String sql = "SELECT * FROM activities WHERE user_id=? AND (UPPER(name) LIKE UPPER(?) OR UPPER(comment) LIKE UPPER(?))"
         def uc = "%$query%"

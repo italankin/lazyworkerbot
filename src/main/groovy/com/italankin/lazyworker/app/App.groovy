@@ -52,6 +52,7 @@ class App implements UpdateHandler {
                 .add(new WeekHandler(activityManager))
                 .add(new ReportHandler(activityManager))
                 .add(new TotalHandler(activityManager))
+                .add(new AlterHandler(activityManager))
                 .add(new SetPreferenceHandler(activityManager))
                 .add(new UsersHandler(activityManager))
         handlerManager.add(new HelpHandler(handlerManager))

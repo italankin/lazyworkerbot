@@ -9,7 +9,7 @@ import com.italankin.lazyworker.app.utils.StringUtils
 
 class CurrentHandler implements Handler {
 
-    private final ActivityManager activityManager
+    protected final ActivityManager activityManager
 
     CurrentHandler(ActivityManager activityManager) {
         this.activityManager = activityManager
@@ -23,8 +23,12 @@ class CurrentHandler implements Handler {
     @Override
     boolean handle(Request request) throws Exception {
         Activity current = activityManager.getCurrentActivity(request.getSenderId())
+        return showActivity(request, current)
+    }
+
+    protected boolean showActivity(Request request, Activity current) {
         if (current == null) {
-            return request.response("No current activity.")
+            return request.response("No activity found.")
         } else {
             String msg = String.format("Activity %s started at _%s_.\nSession time: _%s_",
                     current.desc(),
