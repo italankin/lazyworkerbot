@@ -262,6 +262,21 @@ class ActivityManager {
         return getActivity(userId, id)
     }
 
+    List<Activity> search(int userId, String query) {
+        String sql = "SELECT * FROM activities WHERE user_id=? AND (UPPER(name) LIKE UPPER(?) OR UPPER(comment) LIKE UPPER(?))"
+        def uc = "%$query%"
+        def params = [userId, uc, uc]
+        log(sql, params)
+
+        List<Activity> list = []
+        SQL.query(sql, params) { ResultSet rs ->
+            while (rs.next()) {
+                list += parseActivity(rs)
+            }
+        }
+        return list
+    }
+
     Activity getLatestFinishedActivity(int userId) {
         String sql = "SELECT * FROM activities WHERE user_id=? AND finish_time>0 ORDER BY start_time DESC LIMIT 1"
         def params = [userId]
