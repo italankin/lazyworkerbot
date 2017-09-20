@@ -29,7 +29,7 @@ class TotalHandler implements Handler {
             return request.response("Query contains illegal characters")
         }
         List<Activity> activities = activityManager.search(request.getSenderId(), query)
-        long total = activities.sum { it.duration() }
+        long total = activities.sum(0L) { it.duration() }
         return request.response("Total duration: _${DateUtils.pretty(total)}_ (${activities.size()} activities)")
     }
 
