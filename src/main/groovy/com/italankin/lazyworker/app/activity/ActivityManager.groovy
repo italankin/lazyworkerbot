@@ -221,6 +221,21 @@ class ActivityManager {
     }
 
     List<Activity> getActivitiesForInterval(int userId, long start, long end) throws Exception {
+        String sql = "SELECT * FROM activities WHERE user_id=? AND start_time>=? AND finish_time<=? AND " +
+                "(finish_time>0 OR start_time<?) ORDER BY start_time ASC"
+        def params = [userId, start, end, end]
+        log(sql, params)
+
+        List<Activity> list = []
+        SQL.query(sql, params) { ResultSet rs ->
+            while (rs.next()) {
+                list += parseActivity(rs)
+            }
+        }
+        return list
+    }
+
+    List<Activity> getActivitiesForIntervalSummary(int userId, long start, long end) throws Exception {
         String sql = "SELECT *,sum(finish_time-start_time) as total, start_time/86400000 as day FROM activities " +
                 "WHERE user_id=? AND start_time>=? AND finish_time<=? AND (finish_time>0 OR start_time<?) " +
                 "GROUP BY day,name ORDER BY start_time ASC"

@@ -105,7 +105,7 @@ class ReportHandler implements Handler {
 
     private boolean report(Request request, long start, long end) {
         int userId = request.getSenderId()
-        List<Activity> activities = activityManager.getActivitiesForInterval(userId, start, end)
+        List<Activity> activities = activityManager.getActivitiesForIntervalSummary(userId, start, end)
         boolean oneDay = (end - start) <= DAY_MILLIS
         if (activities.isEmpty()) {
             StringBuilder sb = new StringBuilder("No activities for *")
