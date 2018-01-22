@@ -7,6 +7,8 @@ import org.quartz.impl.StdSchedulerFactory
 import java.util.Calendar
 
 class BackupManager {
+    static final KEY_DB = "db"
+    static final KEY_BACKUP_DIR = "backup_dir"
 
     private final Scheduler scheduler
 
@@ -14,8 +16,8 @@ class BackupManager {
         scheduler = StdSchedulerFactory.getDefaultScheduler()
 
         JobDataMap data = new JobDataMap()
-        data.put(BackupJob.KEY_DB, appConfig.db)
-        data.put(BackupJob.KEY_BACKUP_DIR, appConfig.backupDir)
+        data.put(KEY_DB, appConfig.db)
+        data.put(KEY_BACKUP_DIR, appConfig.backupDir)
         JobDetail job = JobBuilder.newJob(BackupJob.class)
                 .withIdentity("backup")
                 .setJobData(data)
