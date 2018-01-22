@@ -49,6 +49,8 @@ class BackupJob implements Job {
                 fos.close()
             }
             LOG.info("Successfully created backup: $backup")
+        } catch (JobExecutionException e) {
+            throw e
         } catch (Exception e) {
             LOG.error("Backup failed with the exception:", e)
         }
