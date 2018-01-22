@@ -42,10 +42,14 @@ class HelpHandler implements Handler {
                 "/current - Show current activity\n" +
                 "/finish - Finish current activity\n" +
                 "/today - Get stats for today\n" +
+                "/resume - New activity from existing one\n" +
                 "/week - Get stats for this week\n" +
                 "/month - Get stats for this month\n" +
                 "/date - Get stats for specific date\n" +
                 "/show - Show acitivty details\n" +
+                "/total - Show total time\n" +
+                "/update - Update activity name and comment\n" +
+                "/alter - Change activity start and end time\n" +
                 "/report - Create report\n" +
                 "/last - Show last activities\n" +
                 "/delete - Delete activity\n\n" +
