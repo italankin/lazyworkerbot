@@ -53,7 +53,7 @@ class DeleteHandler implements Handler {
     String helpMessage() {
         return "Usage: /delete ids\n\n" +
                 "_ids_ - ids (separated by space) of the activities to delete\n\n" +
-                "*Use with care.*"
+                "*Use with caution.*"
     }
 
 }
