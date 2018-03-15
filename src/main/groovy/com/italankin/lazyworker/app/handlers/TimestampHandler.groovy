@@ -23,9 +23,14 @@ class TimestampHandler implements Handler {
         String[] parts = args.split("[;.,\\-: ]")
         int h, m = 0
         try {
-            h = parts[0].toInteger()
-            if (parts.length >= 2) {
-                m = parts[1].toInteger()
+            if (parts[0].length() == 4) {
+                h = parts[0][0..1].toInteger()
+                m = parts[0][2..3].toInteger()
+            } else {
+                h = parts[0].toInteger()
+                if (parts.length >= 2) {
+                    m = parts[1].toInteger()
+                }
             }
         } catch (NumberFormatException e) {
             LOG.error("handle:", e)
