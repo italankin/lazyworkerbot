@@ -53,6 +53,7 @@ class App implements UpdateHandler {
                 .add(new ReportHandler(activityManager))
                 .add(new TotalHandler(activityManager))
                 .add(new AlterHandler(activityManager))
+                .add(new TimestampHandler())
                 .add(new SetPreferenceHandler(activityManager))
                 .add(new UsersHandler(activityManager))
         handlerManager.add(new HelpHandler(handlerManager))

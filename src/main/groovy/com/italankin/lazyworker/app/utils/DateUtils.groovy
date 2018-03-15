@@ -18,6 +18,10 @@ final class DateUtils {
         DATE_FORMAT_STD.setTimeZone(TIME_ZONE)
     }
 
+    static Calendar getZoneCalendar() {
+        return getZoneCalendar(new Date())
+    }
+
     static Calendar getZoneCalendar(Date from) {
         Calendar calendar = Calendar.getInstance(TIME_ZONE)
         calendar.setTime(from)
