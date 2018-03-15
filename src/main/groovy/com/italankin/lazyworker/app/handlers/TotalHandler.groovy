@@ -23,7 +23,7 @@ class TotalHandler implements Handler {
     boolean handle(Request request) throws Exception {
         String query = request.getRawArgs()
         if (query == null || query.isEmpty()) {
-            return request.response(helpMessage())
+            return false
         }
         if (!query.matches("(?-i)[\\p{L}.,_ -:;]+")) {
             return request.response("Query contains illegal characters")

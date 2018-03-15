@@ -4,8 +4,11 @@ import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Handler
 import com.italankin.lazyworker.app.core.Request
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class UpdateActivityHandler implements Handler {
+    private static final Logger LOG = LoggerFactory.getLogger(UpdateActivityHandler.class)
 
     private final ActivityManager activityManager
 
@@ -32,6 +35,7 @@ class UpdateActivityHandler implements Handler {
         try {
             id = Integer.parseInt(split[0])
         } catch (NumberFormatException e) {
+            LOG.error("handle:", e)
             return false
         }
 

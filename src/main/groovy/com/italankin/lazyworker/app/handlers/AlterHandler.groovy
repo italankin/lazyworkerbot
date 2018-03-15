@@ -3,8 +3,11 @@ package com.italankin.lazyworker.app.handlers
 import com.italankin.lazyworker.app.activity.Activity
 import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Request
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class AlterHandler extends CurrentHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(AlterHandler.class)
 
     AlterHandler(ActivityManager activityManager) {
         super(activityManager)
@@ -19,11 +22,11 @@ class AlterHandler extends CurrentHandler {
     boolean handle(Request request) throws Exception {
         String rawArgs = request.getRawArgs()
         if (rawArgs == null || rawArgs.isEmpty()) {
-            return request.response(helpMessage())
+            return false
         }
         String[] args = rawArgs.split("\\s")
         if (args.length != 3) {
-            return request.response(helpMessage())
+            return false
         }
         int id, userId = request.getSenderId()
         long start, finish
@@ -33,7 +36,8 @@ class AlterHandler extends CurrentHandler {
             start = args[1].toLong()
             finish = args[2].toLong()
         } catch (NumberFormatException e) {
-            return request.response(helpMessage())
+            LOG.error("handle:", e)
+            return false
         }
 
         if (start < 0 || finish < 0) {

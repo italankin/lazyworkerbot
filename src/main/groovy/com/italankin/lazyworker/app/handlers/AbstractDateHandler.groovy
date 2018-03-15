@@ -5,8 +5,11 @@ import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Handler
 import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 abstract class AbstractDateHandler implements Handler {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractDateHandler.class)
 
     protected static final long DAY_MILLIS = 1000 * 60 * 60 * 24
     protected static final long INTERVAL_MAX = 100
@@ -23,6 +26,7 @@ abstract class AbstractDateHandler implements Handler {
         try {
             interval = getInterval(request)
         } catch (Exception e) {
+            LOG.error("handle:", e)
             return false
         }
         if (interval == null) {

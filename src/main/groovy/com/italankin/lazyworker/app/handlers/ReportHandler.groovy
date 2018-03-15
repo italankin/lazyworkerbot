@@ -6,12 +6,15 @@ import com.italankin.lazyworker.app.activity.User
 import com.italankin.lazyworker.app.core.Handler
 import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 
 class ReportHandler implements Handler {
+    private static final Logger LOG = LoggerFactory.getLogger(ReportHandler.class)
 
     static final String PREF_REPORT_CSV_HEADER = "report.csv.header"
 
@@ -87,6 +90,7 @@ class ReportHandler implements Handler {
                 long end = DateUtils.getStartOfDay(DATE_FORMAT.parse(split[1]))
                 return report(request, start, end)
             } catch (ParseException e) {
+                LOG.error("handle:", e)
                 return false
             }
         }

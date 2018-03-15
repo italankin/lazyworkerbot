@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory
 
 class NewHandler extends AbstractFinishHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NewHandler.class)
-
     NewHandler(ActivityManager activityManager) {
         super(activityManager)
     }

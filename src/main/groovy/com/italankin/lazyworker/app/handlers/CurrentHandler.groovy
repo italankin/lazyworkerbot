@@ -26,7 +26,7 @@ class CurrentHandler implements Handler {
         return showActivity(request, current)
     }
 
-    protected boolean showActivity(Request request, Activity current) {
+    protected static boolean showActivity(Request request, Activity current) {
         if (current == null) {
             return request.response("No activity found.")
         } else {

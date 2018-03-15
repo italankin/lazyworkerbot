@@ -47,7 +47,7 @@ class ResumeHandler extends NewHandler {
             }
         }
         if (!finishCurrentActivity(null, request.getSenderId(), request.getApi())) {
-            LOG.info("Current activity found, but failed to finish:\n$activity")
+            LOG.error("Current activity found, but failed to finish:\n$activity")
         }
         return startActivity(request, userId, activity.name, activity.comment)
     }

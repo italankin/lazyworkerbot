@@ -3,12 +3,15 @@ package com.italankin.lazyworker.app.handlers
 import com.italankin.lazyworker.app.activity.ActivityManager
 import com.italankin.lazyworker.app.core.Request
 import com.italankin.lazyworker.app.utils.DateUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 
 class DateHandler extends AbstractDateHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(DateHandler.class)
 
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd")
 
@@ -50,6 +53,7 @@ class DateHandler extends AbstractDateHandler {
                         }
                         return null
                     } catch (NumberFormatException e) {
+                        LOG.error("handle:", e)
                         return null
                     }
                 }
