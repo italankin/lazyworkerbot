@@ -41,7 +41,7 @@ class AlterHandler extends CurrentHandler {
         }
 
         if (start < 0 || finish < 0) {
-            return request.response("_start_ or _end_ must be greater than 0")
+            return request.response("_start_ or _end_ must be equal or greater than 0")
         }
 
         Activity activity = activityManager.getActivity(userId, id)
