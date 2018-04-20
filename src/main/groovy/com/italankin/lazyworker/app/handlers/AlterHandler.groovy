@@ -32,7 +32,6 @@ class AlterHandler extends CurrentHandler {
         long start, finish
 
         try {
-            id = args[0].toInteger()
             start = args[1].toLong()
             finish = args[2].toLong()
         } catch (NumberFormatException e) {
@@ -44,7 +43,17 @@ class AlterHandler extends CurrentHandler {
             return request.response("_start_ or _end_ must be equal or greater than 0")
         }
 
-        Activity activity = activityManager.getActivity(userId, id)
+        Activity activity
+        if (args[0] == "last") {
+            activity = activityManager.getCurrentActivity(userId) ?: activityManager.getLatestFinishedActivity(userId)
+            if (!activity) {
+                return false
+            }
+            id = activity.id
+        } else {
+            id = args[0].toInteger()
+            activity = activityManager.getActivity(userId, id)
+        }
         if (!activity) {
             return request.response("No activity found.")
         }
