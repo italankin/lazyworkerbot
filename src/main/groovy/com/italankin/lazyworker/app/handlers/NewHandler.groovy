@@ -8,8 +8,6 @@ import io.fouad.jtb.core.beans.ReplyMarkup
 import io.fouad.jtb.core.builders.InlineKeyboardButtonBuilder
 import io.fouad.jtb.core.builders.ReplyMarkupBuilder
 import io.fouad.jtb.core.enums.ParseMode
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class NewHandler extends AbstractFinishHandler {
 
@@ -41,6 +39,9 @@ class NewHandler extends AbstractFinishHandler {
         name = name.trim()
         if (name.length() > 50) {
             name = name.substring(0, 50)
+        }
+        if (comment.length() > 500) {
+            comment.substring(0, 500)
         }
         if (finishCurrentActivity(null, request.getSenderId(), request.api)) {
             // do not care
