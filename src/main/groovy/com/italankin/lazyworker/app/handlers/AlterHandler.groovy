@@ -24,7 +24,7 @@ class AlterHandler extends CurrentHandler {
         if (rawArgs == null || rawArgs.isEmpty()) {
             return false
         }
-        String[] args = rawArgs.split("\\s")
+        String[] args = rawArgs.split("\\s+")
         if (args.length != 3) {
             return false
         }
