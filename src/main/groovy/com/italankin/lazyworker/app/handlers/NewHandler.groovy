@@ -37,8 +37,8 @@ class NewHandler extends AbstractFinishHandler {
             name = rawArgs
         }
         name = name.trim()
-        if (name.length() > 50) {
-            name = name.substring(0, 50)
+        if (name.length() > 80) {
+            name = name.substring(0, 80)
         }
         if (comment.length() > 500) {
             comment.substring(0, 500)
